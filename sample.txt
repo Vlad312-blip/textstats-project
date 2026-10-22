@@ -1,0 +1,3 @@
+Hello Debian
+This is a test text for friend.
+Hello again.

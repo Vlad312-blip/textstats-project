@@ -1,47 +1,31 @@
-import sys
-import os
 import re
 from collections import Counter
 from datetime import datetime
 
+# Имитируем текст файла, который хотел проанализировать друг
+text_content = """Это тестовый текст для проверки программы.
+Здесь есть повторяющиеся слова: текст, текст, программа.
+А еще цифры 123 и разные знаки препинания!
+Программа должна посчитать строки, слова и символы.
+И найти самые частые слова."""
+
 def main():
-    # 1. Проверка аргументов командной строки
-    if len(sys.argv) != 2:
-        print(f"Использование: {sys.argv[0]} FILE.txt", file=sys.stderr)
-        sys.exit(1)
+    # 1. Считаем статистику
+    lines_count = len(text_content.splitlines())
+    words_count = len(text_content.split())
+    chars_count = len(text_content)
 
-    file_path = sys.argv[1]
-
-    # 2. Проверка, существует ли файл
-    if not os.path.isfile(file_path):
-        print(f"Файл не найден: {file_path}", file=sys.stderr)
-        sys.exit(1)
-
-    # 3. Чтение файла
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-    except Exception as e:
-        print(f"Ошибка при чтении файла: {e}", file=sys.stderr)
-        sys.exit(1)
-
-    # 4. Подсчет статистики
-    lines_count = len(content.splitlines())
-    words_count = len(content.split())
-    chars_count = len(content)
-
-    # 5. Поиск Топ-3 частых слов
-    # re.findall ищет все слова (буквы и цифры), игнорируя знаки препинания
-    words = re.findall(r'\w+', content.lower())
+    # 2. Ищем Топ-3 частых слов (улучшение)
+    # \w+ находит только слова (буквы и цифры), отбрасывая запятые и точки
+    words = re.findall(r'\w+', text_content.lower())
     word_counts = Counter(words)
     top_3_words = word_counts.most_common(3)
 
-    # 6. Красивый вывод
+    # 3. Красивый вывод (улучшение)
     print("===================================")
     print(" ОТЧЕТ О ФАЙЛЕ")
     print(f" Сгенерировано: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("===================================")
-    print(f"Файл: {file_path}")
     print(f"Строк: {lines_count}")
     print(f"Слов: {words_count}")
     print(f"Символов: {chars_count}")
